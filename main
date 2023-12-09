@@ -1,0 +1,125 @@
+""" BLACKJACK """
+
+# Import random
+import random
+# Clear function
+from replit import clear
+#Import logo
+import art
+print(art.logo)
+
+restart = True
+while restart:
+  
+  cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+  def deal_card(cards):
+    """Choose one random card from deck"""
+    random_card = random.choice(cards)
+    return random_card
+    
+  #Hint 5: Deal the user and computer 2 cards each using deal_card() and append().
+  user_cards = []
+  computer_cards = []
+  
+  #Add 2 cards to user_cards
+  user_cards.append(deal_card(cards))
+  user_cards.append(deal_card(cards))
+  #Add 2 cards to computer_cards
+  computer_cards.append(deal_card(cards))
+  computer_first_card = computer_cards[0]
+  computer_cards.append(deal_card(cards))
+    
+#User play
+  def calculate_score(cards):
+    """Calculate the score of user's cards"""
+    user_score=0
+    user_score = sum(user_cards)
+    #Return user score
+    if user_score == 21:  
+      user_score = 0
+      return user_score
+    elif user_score < 21:
+      return user_score
+    elif (user_score > 21) and (11 in user_cards):
+      user_cards.remove(11)
+      user_cards.append(1)
+      return user_score
+    else:
+      return user_score
+  
+  #Start
+  print(f'Your cards: {user_cards}. Your score is {calculate_score(user_cards)}.')
+  print(f"Computer's first card is {computer_first_card}.")
+
+#Search for Blackjack or Draw:
+  game_end = False
+  if not game_end:
+    calculate_score(cards)
+    if calculate_score(cards) == 0 or calculate_score(cards)>21:
+      game_end = True
+    else:
+#Draw another card ?
+      ask = input("Do you want to draw another card 'yes' or 'no'?\n")
+      if ask == 'yes':
+        user_cards.append(deal_card(cards))
+      elif ask == 'no':
+        game_end = True
+  
+#Computer play: 
+  def calculate_computer_score(cards):
+    """Calculate the score of computer's cards"""
+    computer_score=0
+    computer_score = sum(computer_cards)
+    #The computer should keep drawing cards as long as it has a score less than 17.
+    #Return computer_score
+    if computer_score == 21:  
+      computer_score = 0
+      return computer_score
+    elif computer_score < 21:
+      return computer_score
+    elif computer_score > 21 and 11 in computer_cards:
+      computer_cards.remove(11)
+      computer_cards.append(1)
+      return computer_score
+    else:
+      return computer_score
+  
+  while calculate_computer_score(cards) < 17:
+    computer_cards.append(deal_card(cards))
+    calculate_computer_score(cards)
+      
+#Your and computer score in variables:
+  user_score = calculate_score(user_cards)
+  computer_score = calculate_computer_score(computer_cards)
+
+#Print cards
+  print(f"Your final hand:{user_cards}. Your score is {user_score}.")
+  print(f"Computer's final hand:{computer_cards}. Computer score is {computer_score}.")
+
+#Compare your and computer's score:
+  def compare(user_score, computer_score):
+    """Comparing the User's and Computer's score"""
+    if user_score == computer_score:
+      print("It's a draw.")
+    elif computer_score == 0:
+      print("Computer wins.")
+    elif user_score == 0:
+      print("User wins.")
+    elif user_score > 21:
+      print("Computer wins.")
+    elif computer_score > 21:
+      print("User wins.")
+    elif user_score > computer_score:
+      print("User wins.")
+    elif computer_score > user_score:
+      print("Computer wins.")
+
+  compare(user_score, computer_score)
+#Restart game
+  ask_for_restart = input("Do you want to play again 'yes' or 'no' ?\n")
+  if ask_for_restart == "yes":
+    clear()
+    restart = True
+  else:
+    clear()
+    restart = False
